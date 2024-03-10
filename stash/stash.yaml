@@ -5,9 +5,9 @@ mode: rule
 log-level: warning
 http:
   # 以 PKCS #12 编码的 CA 证书
-  ca: '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'
+  ca: ""
   # 证书密码
-  ca-passphrase: '619A40D4'
+  ca-passphrase: ""
   # 开启 MitM 功能的域名列表，需要确保上述 CA 证书已受系统信任
 port: 7890
 socks-port: 7891
@@ -34,19 +34,19 @@ dns:
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
   fake-ip-filter:
-    - '*.lan'
+    - "*.lan"
     - localhost.ptlogin2.qq.com
-    - '+.srv.nintendo.net'
-    - '+.stun.playstation.net'
-    - '+.msftconnecttest.com'
-    - '+.msftncsi.com'
-    - '+.xboxlive.com'
-    - 'msftconnecttest.com'
-    - 'xbox.*.microsoft.com'
-    - '*.battlenet.com.cn'
-    - '*.battlenet.com'
-    - '*.blzstatic.cn'
-    - '*.battle.net'
+    - "+.srv.nintendo.net"
+    - "+.stun.playstation.net"
+    - "+.msftconnecttest.com"
+    - "+.msftncsi.com"
+    - "+.xboxlive.com"
+    - "msftconnecttest.com"
+    - "xbox.*.microsoft.com"
+    - "*.battlenet.com.cn"
+    - "*.battlenet.com"
+    - "*.blzstatic.cn"
+    - "*.battle.net"
   nameserver:
     - https://doh.pub/dns-query
     - https://dns.alidns.com/dns-query
