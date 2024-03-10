@@ -1,0 +1,462 @@
+# 规则模式：rule（规则） / global（全局代理）/ direct（全局直连）
+mode: rule
+# 设置日志输出级别 (默认级别：silent，即不输出任何内容，以避免因日志内容过大而导致程序内存溢出）。
+# 5 个级别：silent / info / warning / error / debug。级别越高日志输出量越大，越倾向于调试，若需要请自行开启。
+log-level: warning
+http:
+  # 以 PKCS #12 编码的 CA 证书
+  ca: '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'
+  # 证书密码
+  ca-passphrase: '619A40D4'
+  # 开启 MitM 功能的域名列表，需要确保上述 CA 证书已受系统信任
+port: 7890
+socks-port: 7891
+allow-lan: true
+external-controller: :9090
+subscribe-url: http://sub.store/download/collection/all?target=Stash
+proxy-providers:
+  PROXYSUB:
+    type: http
+    url: "http://sub.store/download/collection/all?target=Clash"
+    interval: 86400
+    path: ./PROXYSUB.yaml
+    health-check:
+      enable: true
+      interval: 600
+      url: http://cp.cloudflare.com/generate_204
+dns:
+  enable: true
+  ipv6: true
+  listen: 0.0.0.0:53
+  default-nameserver:
+    - 119.29.29.29
+    - 223.5.5.5
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  fake-ip-filter:
+    - '*.lan'
+    - localhost.ptlogin2.qq.com
+    - '+.srv.nintendo.net'
+    - '+.stun.playstation.net'
+    - '+.msftconnecttest.com'
+    - '+.msftncsi.com'
+    - '+.xboxlive.com'
+    - 'msftconnecttest.com'
+    - 'xbox.*.microsoft.com'
+    - '*.battlenet.com.cn'
+    - '*.battlenet.com'
+    - '*.blzstatic.cn'
+    - '*.battle.net'
+  nameserver:
+    - https://doh.pub/dns-query
+    - https://dns.alidns.com/dns-query
+proxies: []
+proxy-groups:
+  - name: 自动选择
+    type: url-test
+    url: http://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 200
+    proxies: null
+    use: [PROXYSUB]
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Universal/Auto_Speed.png
+    filter: ^((?!套餐|到期|余额|剩余|流量|官网).)*$
+  - name: 手动切换
+    type: select
+    proxies: null
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Universal/Available.png
+    use: [PROXYSUB]
+    filter: ^((?!套餐|到期|余额|剩余|流量|官网).)*$
+  - name: 节点选择
+    type: select
+    proxies:
+      - 自动选择
+      - 香港节点
+      - 台湾节点
+      - 狮城节点
+      - 日本节点
+      - 美国节点
+      - 英国节点
+      - 其他节点
+      - 手动切换
+    icon: https://github.com/shindgewongxj/WHATSINStash/raw/main/icon/%24tash.png
+  - name: 电报消息
+    type: select
+    proxies:
+      - 美国节点
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Social_Media/Telegram.png
+    hidden: true
+  - name: OpenAi
+    type: select
+    proxies:
+      - 节点选择
+      - 自动选择
+      - 狮城节点
+      - 香港节点
+      - 台湾节点
+      - 日本节点
+      - 美国节点
+      - 手动切换
+      - DIRECT
+    icon: https://github.com/shindgewongxj/WHATSINStash/raw/main/icon/openai.png
+  - name: 油管视频
+    type: url-test
+    proxies:
+      - 美国节点
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Google_Suite/YouTube.png
+    hidden: true
+  - name: 奈飞视频
+    type: select
+    proxies:
+      - 节点选择
+      - 自动选择
+      - 狮城节点
+      - 香港节点
+      - 台湾节点
+      - 日本节点
+      - 美国节点
+      - 手动切换
+      - DIRECT
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Universal/Netflix.png
+  - name: 哔哩哔哩
+    type: select
+    proxies:
+      - 全球直连
+      - 台湾节点
+      - 香港节点
+    icon: https://github.com/shindgewongxj/WHATSINStash/raw/main/icon/bilibilitv.png
+  - name: 国外媒体
+    type: url-test
+    proxies:
+      - 节点选择
+      - 自动选择
+      - 香港节点
+      - 台湾节点
+      - 狮城节点
+      - 日本节点
+      - 美国节点
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Social_Media/Diaspora.png
+    hidden: true
+  - name: 国内媒体
+    type: select
+    proxies:
+      - DIRECT
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Universal/TencentVideo.png
+    hidden: true
+  - name: Instagram
+    type: select
+    proxies:
+      - 节点选择
+      - 自动选择
+      - 香港节点
+      - 台湾节点
+      - 狮城节点
+      - 日本节点
+      - 美国节点
+      - 其他节点
+      - 手动切换
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Social_Media/Instagram.png
+  - name: Twitter
+    type: url-test
+    proxies:
+      - 美国节点
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Social_Media/Twitter.png
+  - icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Social_Media/TikTok.png
+    name: TikTok
+    proxies:
+      - 日本节点
+    type: url-test
+    hidden: true
+  - name: 谷歌FCM
+    type: url-test
+    proxies:
+      - 美国节点
+      - 香港节点
+      - 台湾节点
+      - 狮城节点
+      - 日本节点
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Google_Suite/Google.png
+  - name: WeChat
+    type: select
+    proxies:
+      - DIRECT
+      - 香港节点
+      - 台湾节点
+      - 狮城节点
+      - 日本节点
+      - 手动切换
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Universal/WeChat.png
+  - name: 网易音乐
+    type: select
+    proxies:
+      - DIRECT
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Universal/NetEase_Music.png
+    hidden: true
+  - name: 微软云盘
+    type: select
+    proxies:
+      - DIRECT
+    icon: https://raw.githubusercontent.com/Orz-3/mini/master/Alpha/ASN.png
+    hidden: true
+  - name: 微软服务
+    type: select
+    proxies:
+      - DIRECT
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Universal/Microsoft.png
+    hidden: true
+  - name: 苹果服务
+    type: select
+    proxies:
+      - DIRECT
+      - 香港节点
+    icon: https://github.com/shindgewongxj/WHATSINStash/raw/main/icon/apple.png
+  - name: 全球直连
+    type: select
+    proxies:
+      - DIRECT
+    icon: https://github.com/shindgewongxj/WHATSINStash/raw/main/icon/londoneye.png
+    hidden: true
+  - name: Speedtest
+    type: select
+    proxies:
+      - DIRECT
+      - 节点选择
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Universal/Speedtest.png
+  - name: 漏网之鱼
+    type: select
+    proxies:
+      - 节点选择
+      - 自动选择
+      - DIRECT
+      - 香港节点
+      - 台湾节点
+      - 狮城节点
+      - 日本节点
+      - 美国节点
+      - 英国节点
+      - 手动切换
+    icon: https://github.com/shindgewongxj/WHATSINStash/raw/main/icon/betahub.png
+  - name: 香港节点
+    type: url-test
+    proxies: null
+    use: [PROXYSUB]
+    filter: 港|🇭🇰|香港|HK|Hong
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/Hong_Kong.png
+  - name: 日本节点
+    type: url-test
+    proxies: null
+    filter: 日|🇯🇵|日本|JP|Japan
+    use: [PROXYSUB]
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/Japan.png
+  - name: 美国节点
+    type: url-test
+    proxies: null
+    filter: 美|🇺🇸|美国|US|States|American
+    use: [PROXYSUB]
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/United_States.png
+  - name: 台湾节点
+    type: url-test
+    proxies: null
+    filter: 台|🇨🇳|台湾|TW|Tai
+    use: [PROXYSUB]
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/Taiwan.png
+  - name: 狮城节点
+    type: url-test
+    proxies: null
+    filter: 坡|🇸🇬|新加坡|狮城|SG|Singapore
+    use: [PROXYSUB]
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/Singapore.png
+  - name: 英国节点
+    type: url-test
+    proxies: null
+    filter: 🇬🇧|英国|英|英格兰|UK|United Kingdom
+    use: [PROXYSUB]
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/United_Kingdom.png
+  - name: 其他节点
+    type: url-test
+    proxies: null
+    filter: ^((?!套餐|到期|余额|剩余|流量|官网|🇭🇰|港|HK|Hong|🇹🇼|台|TW|Tai|🇯🇵|日|JP|Japan|🇸🇬|坡|狮城|SG|Singapore|🇰🇷|韩|KR|KOR|Korea|🇺🇸|美|US|States|American|🇬🇧|英国|英|英格兰|UK|United Kingdom).)*$
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/Turkey.png
+    use: [PROXYSUB]
+rule-providers:
+  # 远程规则集
+  Apple:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Apple/Apple.yaml
+    path: ./ruleset/Apple.yaml
+    interval: 86400
+  China:
+    type: http
+    behavior: domain
+    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Providers/ChinaDomain.yaml
+    path: ./ruleset/ChinaDomain.yaml
+    interval: 86400
+  ChinaIp:
+    type: http
+    behavior: ipcidr
+    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Providers/ChinaIp.yaml
+    path: ./ruleset/ChinaIp.yaml
+    interval: 86400
+  GoogleFCM:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/GoogleFCM/GoogleFCM.yaml
+    path: ./ruleset/GoogleFCM.yaml
+    interval: 86400
+  Netflix:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Netflix/Netflix.yaml
+    path: ./ruleset/Netflix.yaml
+    interval: 86400
+  Netflix_IP:
+    type: http
+    behavior: ipcidr
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Netflix/Netflix_IP.txt
+    path: ./ruleset/Netflix_IP.yaml
+    interval: 86400
+    format: text
+  Microsoft:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Microsoft/Microsoft.yaml
+    path: ./ruleset/Microsoft.yaml
+    interval: 86400
+  OneDrive:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/OneDrive/OneDrive.yaml
+    path: ./ruleset/OneDrive.yaml
+    interval: 86400
+  WeChat:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/WeChat/WeChat.yaml
+    path: ./ruleset/WeChat.yaml
+    interval: 86400
+  BiliBili:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/BiliBili/BiliBili.yaml
+    path: ./ruleset/BiliBili.yaml
+    interval: 86400
+  Telegram:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Telegram/Telegram.yaml
+    path: ./ruleset/Telegram.yaml
+    interval: 86400
+  OpenAI:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/OpenAI/OpenAI.yaml
+    path: ./ruleset/OpenAI.yaml
+    interval: 86400
+  Twitter:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontents.com/blackmatrix7/ios_rule_script/master/rule/Clash/Twitter/Twitter.yaml
+    path: ./ruleset/Twitter.yaml
+    interval: 86400
+  YouTube:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontents.com/blackmatrix7/ios_rule_script/master/rule/Clash/YouTube/YouTube.yaml
+    path: ./ruleset/YouTube.yaml
+    interval: 86400
+  ChinaMedia:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Providers/ChinaMedia.yaml
+    path: ./ruleset/ChinaMedia.yaml
+    interval: 86400
+  GlobalMedia: # 国际媒体
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/GlobalMedia/GlobalMedia.yaml
+    path: ./ruleset/Streaming.yaml
+    interval: 86400
+  Streaming: # 国际媒体
+    type: http
+    behavior: domain
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/GlobalMedia/GlobalMedia_Domain_For_Clash.txt
+    path: ./ruleset/Streaming.yaml
+    interval: 86400
+  Proxy:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Proxy/Proxy.yaml
+    path: ./ruleset/Proxy.yaml
+    interval: 86400
+  Proxy_Domain:
+    type: http
+    behavior: domain
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Proxy/Proxy_Domain_For_Clash.txt
+    path: ./ruleset/Proxy_Domain_For_Clash.yaml
+    interval: 86400
+    format: txt
+  Instagram:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Instagram/Instagram.yaml
+    path: ./ruleset/Instagram.yaml
+    interval: 86400
+  Threads:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Threads/Threads.yaml
+    path: ./ruleset/Threads.yaml
+    interval: 86400
+  Speedtest:
+    type: http
+    behavior: classical
+    url: https://ghproxy.com/https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Speedtest/Speedtest.yaml
+    path: ./ruleset/Speedtest.yaml
+    interval: 86400
+  NetEaseMusic:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/NetEaseMusic/NetEaseMusic.yaml
+    path: ./ruleset/NetEaseMusic.yaml
+    interval: 86400
+  Lan: # 局域网
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Lan/Lan.yaml
+    path: ./ruleset/lan.yaml
+    interval: 86400
+  TikTok:
+    behavior: classical
+    format: yaml
+    interval: 86400
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/TikTok/TikTok.yaml
+rules:
+  - RULE-SET,TikTok,TikTok
+  # 分流规则引用
+  - RULE-SET,Apple,苹果服务
+  - RULE-SET,China,全球直连
+  - RULE-SET,ChinaIp,全球直连,no-resolve
+  - RULE-SET,GoogleFCM,谷歌FCM
+  - RULE-SET,Netflix,奈飞视频
+  - RULE-SET,Netflix_IP,奈飞视频,no-resolve
+  - RULE-SET,Microsoft,微软服务
+  - RULE-SET,OneDrive,微软云盘
+  - RULE-SET,WeChat,WeChat
+  - RULE-SET,BiliBili,哔哩哔哩
+  - RULE-SET,Telegram,电报消息
+  - RULE-SET,OpenAI,OpenAi
+  - RULE-SET,Telegram,电报消息
+  - RULE-SET,YouTube,油管视频
+  - RULE-SET,ChinaMedia,国内视频
+  - RULE-SET,Streaming,国外视频
+  - RULE-SET,GlobalMedia,国外视频
+  - RULE-SET,Proxy,节点选择
+  - RULE-SET,Proxy_Domain,节点选择
+  - RULE-SET,Instagram,Instagram
+  - RULE-SET,Threads,Instagram
+  - RULE-SET,Speedtest,Speedtest
+  - RULE-SET,NetEaseMusic,网易音乐
+  - RULE-SET,Twitter,Twitter
+  - GEOIP,CN,DIRECT
+  - MATCH,漏网之鱼
