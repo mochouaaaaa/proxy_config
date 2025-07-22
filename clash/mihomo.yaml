@@ -1,0 +1,760 @@
+mixed-port: 7890
+
+mode: rule
+allow-lan: true
+
+log-level: warning
+
+find-process-mode: always
+
+tcp-concurrent: true
+
+external-controller: :9090
+external-ui: zashboard
+external-ui-url: "https://github.com/Zephyruso/zashboard/archive/refs/heads/gh-pages.zip"
+secret: 998486
+profile:
+  store-selected: true
+  store-fake-ip: true
+
+tun:
+  enable: true
+  stack: mixed
+  auto-route: true
+  auto-redirect: true
+  auto-detect-interface: true
+  dns-hijack:
+    - any:53
+    - tcp://any:53
+
+dns:
+  enable: true
+  listen: :53
+  enhanced-mode: fake-ip
+  fake-ip-range: 16.0.0.1/8
+
+# 节点订阅
+proxy-providers:
+  subscription:
+    type: http
+    url: "http://127.0.0.1:9090/proxies"
+    interval: 86400
+    health-check:
+      enable: true
+      url: http://www.gstatic.com/generate_204
+      interval: 7200
+
+proxies-anchor:
+  all-proxies: &all-proxies
+    type: url-test
+    include-all-providers: true
+    interval: 300
+    url: http://www.google.com/generate_204
+
+# 内置节点（如直连）
+proxies:
+  - name: 全球直连
+    type: direct
+    icon: https://github.com/shindgewongxj/WHATSINStash/raw/main/icon/londoneye.png
+
+# 策略组
+proxy-groups:
+  - name: 自动选择
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Universal/Auto_Speed.png
+    <<: *all-proxies
+
+  - name: 手动切换
+    type: select
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Universal/Select.png
+    use:
+      - subscription
+
+  - name: 节点选择
+    type: select
+    icon: https://github.com/shindgewongxj/WHATSINStash/raw/main/icon/%24tash.png
+    proxies:
+      - 全球直连
+      - 香港节点
+      - 台湾节点
+      - 日本节点
+      - 韩国节点
+      - 泰国节点
+      - 美国节点
+      - 英国节点
+      - 印度节点
+      - 法国节点
+      - 德国节点
+      - 荷兰节点
+      - 南非节点
+      - 新加坡节点
+      - 菲律宾节点
+      - 加拿大节点
+      - 俄罗斯节点
+      - 阿根廷节点
+      - 爱尔兰节点
+      - 土耳其节点
+
+  - name: OpenAI
+    type: select
+    icon: https://github.com/shindgewongxj/WHATSINStash/raw/main/icon/openai.png
+    proxies:
+      - 新加坡节点
+      - 香港节点
+      - 美国节点
+
+  - name: 电报消息
+    type: select
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Social_Media/Telegram.png
+    proxies:
+      - 新加坡节点
+      - 美国节点
+
+  - name: 油管视频
+    type: select
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Google_Suite/YouTube.png
+    proxies:
+      - 美国节点
+      - 香港节点
+
+  - name: 奈飞视频
+    type: select
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Universal/Netflix.png
+    proxies:
+      - 奈飞节点
+      - 节点选择
+      - 台湾节点
+      - 日本节点
+      - 韩国节点
+      - 泰国节点
+      - 美国节点
+      - 英国节点
+      - 印度节点
+      - 法国节点
+      - 德国节点
+      - 荷兰节点
+      - 南非节点
+      - 新加坡节点
+      - 菲律宾节点
+      - 加拿大节点
+      - 俄罗斯节点
+      - 阿根廷节点
+      - 爱尔兰节点
+      - 土耳其节点
+
+  - name: 巴哈姆特
+    type: select
+    proxies:
+      - 节点选择
+      - 手动切换
+      - 自动选择
+
+  - name: 哔哩哔哩
+    type: select
+    icon: https://github.com/shindgewongxj/WHATSINStash/raw/main/icon/bilibilitv.png
+    proxies:
+      - 全球直连
+      - 香港节点
+      - 台湾节点
+
+  - name: WeChat
+    type: select
+    proxies:
+      - DIRECT
+      - 新加坡节点
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Universal/WeChat.png
+
+  - name: 网易音乐
+    type: select
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Universal/NetEase_Music.png
+    proxies:
+      - 全球直连
+      - 香港节点
+      - 台湾节点
+
+  - name: Spotify
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Social_Media/Spotify.png
+    type: select
+    proxies:
+      - 日本节点
+      - 香港节点
+      - 台湾节点
+
+  - name: 国外媒体
+    type: select
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Social_Media/Diaspora.png
+    proxies:
+      - 香港节点
+      - 台湾节点
+      - 日本节点
+
+  - name: 国内媒体
+    type: select
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Universal/TencentVideo.png
+    proxies:
+      - 全球直连
+
+  - name: Instagram
+    type: select
+    proxies:
+      - 节点选择
+      - 自动选择
+      - 香港节点
+      - 台湾节点
+      - 新加坡节点
+      - 日本节点
+      - 美国节点
+      - 手动切换
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Social_Media/Instagram.png
+
+  - name: 谷歌搜索
+    type: select
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Google_Suite/Google.png
+    proxies:
+      - 新加坡节点
+      - 美国节点
+
+  - name: 谷歌FCM
+    type: select
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Google_Suite/Google.png
+    proxies:
+      - 美国节点
+      - 新加坡节点
+
+  - name: 微软云盘
+    type: select
+    icon: https://raw.githubusercontent.com/Orz-3/mini/master/Alpha/ASN.png
+    proxies:
+      - 全球直连
+      - 香港节点
+
+  - name: 微软服务
+    type: select
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Universal/Microsoft.png
+    proxies:
+      - 全球直连
+
+  - name: 苹果服务
+    type: select
+    icon: https://github.com/shindgewongxj/WHATSINStash/raw/main/icon/apple.png
+    proxies:
+      - 全球直连
+      - 香港节点
+
+  - name: 游戏平台
+    icon: https://raw.githubusercontent.com/ewigl/licons/refs/heads/main/logos/steam.png
+    type: select
+    proxies:
+      - 游戏节点
+      - 香港节点
+      - 台湾节点
+
+  - name: GiffGaff
+    icon: https://www.svgrepo.com/show/516631/giffgaff.svg
+    type: select
+    proxies:
+      - 英国节点
+
+  - name: Twitter
+    type: url-test
+    proxies:
+      - 美国节点
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Social_Media/Twitter.png
+
+  - name: TikTok
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Social_Media/TikTok.png
+    type: select
+    proxies:
+      - 日本节点
+
+  - name: GitHub
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Social_Media/GitHub.png
+    type: select
+    proxies:
+      - 自动选择
+      - 香港节点
+
+  - name: Speedtest
+    type: select
+    proxies:
+      - DIRECT
+      - 节点选择
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Universal/Speedtest.png
+
+  - name: 漏网之鱼
+    type: select
+    icon: https://github.com/shindgewongxj/WHATSINStash/raw/main/icon/betahub.png
+    proxies:
+      - 自动选择
+      - 手动切换
+      - 香港节点
+      - 台湾节点
+      - 日本节点
+      - 韩国节点
+      - 泰国节点
+      - 美国节点
+      - 英国节点
+      - 印度节点
+      - 法国节点
+      - 德国节点
+      - 荷兰节点
+      - 南非节点
+      - 新加坡节点
+      - 菲律宾节点
+      - 加拿大节点
+      - 俄罗斯节点
+      - 阿根廷节点
+      - 爱尔兰节点
+      - 土耳其节点
+
+  # 分类节点（基于正则匹配）
+  - name: 游戏节点
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Universal/Game.png
+    <<: *all-proxies
+    filter: "(游戏)|GAME|Game"
+
+  - name: 香港节点
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/Hong_Kong.png
+    <<: *all-proxies
+    filter: "(🇭🇰)|港|虚通|HK|Hong"
+
+  - name: 台湾节点
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/Taiwan.png
+    <<: *all-proxies
+    filter: "(🇹🇼)|台|TW|Tai"
+
+  - name: 日本节点
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/Japan.png
+    <<: *all-proxies
+    filter: "(🇯🇵)|日|东京|大阪|JP|Japan"
+
+  - name: 韩国节点
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/South_Korea.png
+    <<: *all-proxies
+    filter: "(🇰🇷)|韩|KR|Korea"
+
+  - name: 泰国节点
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/Thailand.png
+    <<: *all-proxies
+    filter: "(🇹🇭)|泰|曼谷|TH|Thailand"
+
+  - name: 美国节点
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/United_States.png
+    <<: *all-proxies
+    filter: "(🇺🇸)|美|US|United States"
+
+  - name: 英国节点
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/United_Kingdom.png
+    <<: *all-proxies
+    filter: "(🇬🇧)|英|UK|United Kingdom"
+
+  - name: 印度节点
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/India.png
+    <<: *all-proxies
+    filter: "(🇮🇳)|印|IN|India"
+
+  - name: 法国节点
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/France.png
+    <<: *all-proxies
+    filter: "(🇫🇷)|法|FR|France"
+
+  - name: 德国节点
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/Germany.png
+    <<: *all-proxies
+    filter: "(🇩🇪)|德|DE|Germany"
+
+  - name: 荷兰节点
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/Netherlands.png
+    <<: *all-proxies
+    filter: "(🇳🇱)|荷|NL|Netherlands"
+
+  - name: 南非节点
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/South_Africa.png
+    <<: *all-proxies
+    filter: "(🇿🇦)|南非|ZA|South Africa"
+
+  - name: 新加坡节点
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/Singapore.png
+    <<: *all-proxies
+    filter: "(🇸🇬)|新|SG|Singapore"
+
+  - name: 菲律宾节点
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/Philippines.png
+    <<: *all-proxies
+    filter: "(🇵🇭)|菲|PH|Philippines"
+
+  - name: 加拿大节点
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/Canada.png
+    <<: *all-proxies
+    filter: "(🇨🇦)|加|CA|Canada"
+
+  - name: 俄罗斯节点
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/Russia.png
+    <<: *all-proxies
+    filter: "(🇷🇺)|俄|RU|Russia"
+
+  - name: 阿根廷节点
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/Argentina.png
+    <<: *all-proxies
+    filter: "(🇦🇷)|阿|AR|Argentina"
+
+  - name: 爱尔兰节点
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/Ireland.png
+    <<: *all-proxies
+    filter: "(🇮🇪)|爱|IE|Ireland"
+
+  - name: 土耳其节点
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/Turkey.png
+    <<: *all-proxies
+    filter: "(🇹🇷)|土|TR|Turkey"
+
+  - name: 奈飞节点
+    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Universal/Netflix.png
+    <<: *all-proxies
+    filter: "(NF)|奈飞|Netflix"
+
+rule-providers:
+  # ==================block==========================
+  Privacy_Domain:
+    type: http
+    behavior: domain
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Privacy/Privacy_Domain.txt
+  Privacy:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Privacy/Privacy.yaml
+  Hijacking:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Hijacking/Hijacking.yaml
+  BlockHttpDNS:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/BlockHttpDNS/BlockHttpDNS.yaml
+
+  #==================apple======================
+  SystemOTA:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/SystemOTA/SystemOTA.yaml
+  iCloud:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/iCloud/iCloud.yaml
+  AppleMail:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/AppleMail/AppleMail.yaml
+  AppleID:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/AppleID/AppleID.yaml
+  Apple_Domain:
+    type: http
+    behavior: domain
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Apple/Apple_Domain.txt
+  Apple:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Apple/Apple.yaml
+
+  # ============China DNS================================
+  China_Domain:
+    type: http
+    behavior: domain
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/China/China_Domain.txt
+  China_Resolve:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/China/China.yaml
+  ChinaDNS:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/ChinaDNS/ChinaDNS.yaml
+
+  # ======================App===========================
+  WeChat:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/WeChat/WeChat.yaml
+  Jetbrains:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Jetbrains/Jetbrains.yaml
+  Docker:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Docker/Docker.yaml
+  Spotify:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Spotify/Spotify.yaml
+  YouTubeMusic:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/YouTubeMusic/YouTubeMusic.yaml
+  Instagram:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Instagram/Instagram.yaml
+  Twitter:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Twitter/Twitter.yaml
+  PayPal:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/PayPal/PayPal.yaml
+  GitHub:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/GitHub/GitHub.yaml
+  Reddit:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Reddit/Reddit.yaml
+  OneDrive:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/OneDrive/OneDrive.yaml
+  Microsoft:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Microsoft/Microsoft.yaml
+  Gemini:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Gemini/Gemini.yaml
+  GoogleDrive:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/GoogleDrive/GoogleDrive.yaml
+  GoogleVoice:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/GoogleVoice/GoogleVoice.yaml
+  GoogleFCM:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/GoogleFCM/GoogleFCM.yaml
+  GoogleSearch:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/GoogleSearch/GoogleSearch.yaml
+  Google:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Google/Google.yaml
+  OpenAI:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/OpenAI/OpenAI.yaml
+  Telegram:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/TelegramSG/TelegramSG.yaml
+  Facebook:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Facebook/Facebook.yaml
+
+  # ================Media==========================
+  Netflix:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Netflix/Netflix.yaml
+  Disney:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Disney/Disney.yaml
+  HBOHK:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/HBOHK/HBOHK.yaml
+  GlobalMedia_All:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/GlobalMedia/GlobalMedia.yaml
+  ChinaMedia:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/ChinaMedia/ChinaMedia.yaml
+  Bahamut:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Bahamut/Bahamut.yaml
+  BiliBili:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/BiliBili/BiliBili.yaml
+  BilibiliHMT:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/BilibiliHMT.list
+  YouTube:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/YouTube/YouTube.yaml
+
+  # =============测试/下载====================
+  DownLoad:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Download/Download.yaml
+  Speedtest:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Speedtest/Speedtest.yaml
+
+  # ==========游戏===============
+
+  Epic:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Epic/Epic.yaml
+  Origin:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Origin/Origin.yaml
+  Sony:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Sony/Sony.yaml
+  SteanCN:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/SteamCN/SteamCN.yaml
+  Steam:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Steam/Steam.yaml
+  Nintendo:
+    type: http
+    behavior: classical
+    url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Nintendo/Nintendo.yaml
+
+  #  ------------------------------------------------
+
+  Lan: # 局域网
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Lan/Lan.yaml
+  TikTok:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/TikTok/TikTok.yaml
+
+rules:
+  # 分流规则引用
+
+  # =================custom=========================
+  - DOMAIN,cache.nixos.org,自动选择
+  - DOMAIN,cache.nixos.org,自动选择
+  - DOMAIN-SUFFIX,google.com,OpenAI
+  - DOMAIN,forums.swift.org,美国节点
+  - DOMAIN-SUFFIX,ipa.store,全球直连
+  - DOMAIN,api.adguard.org,REJECT #  Adguard
+  - DOMAIN,crystalidea.license-manage.com,REJECT #  Macs Fan Control
+  - DOMAIN-SUFFIX,giffgaff.com,GiffGaff
+
+  - RULE-SET,Lan,全球直连,no-resolve
+  # - PROTOCOL,DOH,全球直连 #  DOH DIRECT
+
+  # ====================download===============================
+  - PROCESS-NAME,v2ray,全球直连
+  - PROCESS-NAME,xray,全球直连
+  - PROCESS-NAME,naive,全球直连
+  - PROCESS-NAME,Trojan,全球直连
+  - PROCESS-NAME,Trojan-go,全球直连
+  - PROCESS-NAME,ss-local,全球直连
+  - PROCESS-NAME,privoxy,全球直连
+  - PROCESS-NAME,leaf,全球直连
+  - PROCESS-NAME,UUBooster,全球直连
+  -  # > Download for Surge Mac
+  - PROCESS-NAME,aria2c,全球直连
+  - PROCESS-NAME,fdm,全球直连
+  - PROCESS-NAME,Folx,全球直连
+  - PROCESS-NAME,NetTransport,全球直连
+  - PROCESS-NAME,Thunder,全球直连
+  - PROCESS-NAME,Transmission,全球直连
+  - PROCESS-NAME,uTorrent,全球直连
+  - PROCESS-NAME,WebTorrent,全球直连
+  - PROCESS-NAME,"WebTorrent Helper",全球直连
+  # > BT
+  - DOMAIN-SUFFIX,smtp,全球直连
+  - DOMAIN-KEYWORD,aria2,全球直连
+  - DOMAIN-KEYWORD,announce,全球直连
+  - DOMAIN-KEYWORD,torrent,全球直连
+  - DOMAIN-KEYWORD,tracker,全球直连
+  # > 迅雷
+  - DOMAIN-SUFFIX,xunlei.com,全球直连
+  - PROCESS-NAME,DownloadService,全球直连
+  # CloudPan
+  - PROCESS-NAME,Weiyun,全球直连 #  微云
+  - PROCESS-NAME,baidunetdisk,全球直连 # BaiduYun
+
+  # =============block===============================
+  - DOMAIN-SUFFIX,Privacy_Domain,REJECT
+  - RULE-SET,Privacy,REJECT
+  - RULE-SET,Hijacking,REJECT
+  - RULE-SET,BlockHttpDNS,REJECT
+
+  # ===============apple============================
+  - PROCESS-NAME,Music,苹果服务
+  - RULE-SET,SystemOTA,REJECT
+  - RULE-SET,iCloud,苹果服务
+  - RULE-SET,AppleMail,苹果服务
+  - RULE-SET,AppleID,苹果服务
+  - RULE-SET,Apple_Domain,苹果服务
+  - RULE-SET,Apple,苹果服务
+
+  # ===========China DNS==================
+  - DOMAIN-SUFFIX,China_Domain,全球直连
+  - RULE-SET,China_Resolve,全球直连
+  - RULE-SET,ChinaDNS,全球直连
+
+  # ========App=================
+  - RULE-SET,WeChat,WeChat
+  - RULE-SET,Jetbrains,自动选择
+  - RULE-SET,Docker,自动选择
+  - RULE-SET,TikTok,TikTok
+  - RULE-SET,Spotify,Spotify
+  - RULE-SET,YouTubeMusic,Spotify
+  - RULE-SET,Instagram,美国节点
+  - RULE-SET,Twitter,美国节点
+  - RULE-SET,PayPal,手动切换
+  - RULE-SET,GitHub,GitHub
+  - RULE-SET,Reddit,GitHub
+  - RULE-SET,OneDrive,微软云盘
+  - RULE-SET,Microsoft,微软服务
+  - RULE-SET,Gemini,OpenAI
+  - RULE-SET,GoogleDrive,自动选择
+  - RULE-SET,GoogleVoice,自动选择
+  - RULE-SET,GoogleFCM,谷歌FCM
+  - RULE-SET,GoogleSearch,谷歌搜索
+  - RULE-SET,Google,自动选择
+  - RULE-SET,OpenAI,OpenAI
+  - RULE-SET,Telegram,电报消息
+  - RULE-SET,Facebook,美国节点
+
+  # Media
+  - RULE-SET,Netflix,奈飞视频
+  - RULE-SET,Disney,国外媒体
+  - RULE-SET,HBOHK,国外媒体
+  - RULE-SET,GlobalMedia_All,国外媒体
+  - RULE-SET,ChinaMedia,国内媒体,no-resolve
+  - RULE-SET,Bahamut,巴哈姆特
+  - RULE-SET,BilibiliHMT,哔哩哔哩
+  - RULE-SET,BiliBili,哔哩哔哩
+  - RULE-SET,YouTube,油管视频
+
+  # =========游戏================
+
+  - RULE-SET,Epic,游戏平台
+  - RULE-SET,Origin,游戏平台
+  - RULE-SET,Sony,游戏平台
+  - RULE-SET,SteanCN,游戏平台
+  - RULE-SET,Steam,游戏平台
+  # ===========================
+
+  - GEOIP,CN,全球直连,no-resolve
+  - MATCH,漏网之鱼,dns-failed
