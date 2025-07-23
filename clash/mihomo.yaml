@@ -144,6 +144,7 @@ proxy-groups:
   - name: 巴哈姆特
     type: select
     proxies:
+      - 台湾节点
       - 节点选择
       - 手动切换
       - 自动选择
@@ -193,18 +194,18 @@ proxy-groups:
     proxies:
       - 全球直连
 
-  - name: Instagram
-    type: select
-    proxies:
-      - 节点选择
-      - 自动选择
-      - 香港节点
-      - 台湾节点
-      - 新加坡节点
-      - 日本节点
-      - 美国节点
-      - 手动切换
-    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Social_Media/Instagram.png
+  # - name: Instagram
+  #   type: select
+  #   proxies:
+  #     - 节点选择
+  #     - 自动选择
+  #     - 香港节点
+  #     - 台湾节点
+  #     - 新加坡节点
+  #     - 日本节点
+  #     - 美国节点
+  #     - 手动切换
+  #   icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Social_Media/Instagram.png
 
   - name: 谷歌搜索
     type: select
@@ -225,6 +226,7 @@ proxy-groups:
     icon: https://raw.githubusercontent.com/Orz-3/mini/master/Alpha/ASN.png
     proxies:
       - 全球直连
+      - 新加坡节点
       - 香港节点
 
   - name: 微软服务
@@ -232,6 +234,8 @@ proxy-groups:
     icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Universal/Microsoft.png
     proxies:
       - 全球直连
+      - 新加坡节点
+      - 香港节点
 
   - name: 苹果服务
     type: select
@@ -254,11 +258,11 @@ proxy-groups:
     proxies:
       - 英国节点
 
-  - name: Twitter
-    type: url-test
-    proxies:
-      - 美国节点
-    icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Social_Media/Twitter.png
+  # - name: Twitter
+  #   type: url-test
+  #   proxies:
+  #     - 美国节点
+  #   icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Social_Media/Twitter.png
 
   - name: TikTok
     icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Social_Media/TikTok.png
@@ -275,9 +279,10 @@ proxy-groups:
 
   - name: Speedtest
     type: select
+    use:
+      - subscription
     proxies:
       - DIRECT
-      - 节点选择
     icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Universal/Speedtest.png
 
   - name: 漏网之鱼
@@ -286,6 +291,7 @@ proxy-groups:
     proxies:
       - 自动选择
       - 手动切换
+      - 全球直连
       - 香港节点
       - 台湾节点
       - 日本节点
@@ -311,6 +317,7 @@ proxy-groups:
     icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Universal/Game.png
     <<: *all-proxies
     filter: "(游戏)|GAME|Game"
+    hidden: true
 
   - name: 香港节点
     icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/Hong_Kong.png
