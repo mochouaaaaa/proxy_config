@@ -316,101 +316,121 @@ proxy-groups:
     icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/Hong_Kong.png
     <<: *all-proxies
     filter: "(🇭🇰)|港|虚通|HK|Hong"
+    hidden: true
 
   - name: 台湾节点
     icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/Taiwan.png
     <<: *all-proxies
     filter: "(🇹🇼)|台|TW|Tai"
+    hidden: true
 
   - name: 日本节点
     icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/Japan.png
     <<: *all-proxies
     filter: "(🇯🇵)|日|东京|大阪|JP|Japan"
+    hidden: true
 
   - name: 韩国节点
     icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/South_Korea.png
     <<: *all-proxies
     filter: "(🇰🇷)|韩|KR|Korea"
+    hidden: true
 
   - name: 泰国节点
     icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/Thailand.png
     <<: *all-proxies
     filter: "(🇹🇭)|泰|曼谷|TH|Thailand"
+    hidden: true
 
   - name: 美国节点
     icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/United_States.png
     <<: *all-proxies
     filter: "(🇺🇸)|美|US|United States"
+    hidden: true
 
   - name: 英国节点
     icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/United_Kingdom.png
     <<: *all-proxies
     filter: "(🇬🇧)|英|UK|United Kingdom"
+    hidden: true
 
   - name: 印度节点
     icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/India.png
     <<: *all-proxies
     filter: "(🇮🇳)|印|IN|India"
+    hidden: true
 
   - name: 法国节点
     icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/France.png
     <<: *all-proxies
     filter: "(🇫🇷)|法|FR|France"
+    hidden: true
 
   - name: 德国节点
     icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/Germany.png
     <<: *all-proxies
     filter: "(🇩🇪)|德|DE|Germany"
+    hidden: true
 
   - name: 荷兰节点
     icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/Netherlands.png
     <<: *all-proxies
     filter: "(🇳🇱)|荷|NL|Netherlands"
+    hidden: true
 
   - name: 南非节点
     icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/South_Africa.png
     <<: *all-proxies
     filter: "(🇿🇦)|南非|ZA|South Africa"
+    hidden: true
 
   - name: 新加坡节点
     icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/Singapore.png
     <<: *all-proxies
     filter: "(🇸🇬)|新|SG|Singapore"
+    hidden: true
 
   - name: 菲律宾节点
     icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/Philippines.png
     <<: *all-proxies
     filter: "(🇵🇭)|菲|PH|Philippines"
+    hidden: true
 
   - name: 加拿大节点
     icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/Canada.png
     <<: *all-proxies
     filter: "(🇨🇦)|加|CA|Canada"
+    hidden: true
 
   - name: 俄罗斯节点
     icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/Russia.png
     <<: *all-proxies
     filter: "(🇷🇺)|俄|RU|Russia"
+    hidden: true
 
   - name: 阿根廷节点
     icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/Argentina.png
     <<: *all-proxies
     filter: "(🇦🇷)|阿|AR|Argentina"
+    hidden: true
 
   - name: 爱尔兰节点
     icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/Ireland.png
     <<: *all-proxies
     filter: "(🇮🇪)|爱|IE|Ireland"
+    hidden: true
 
   - name: 土耳其节点
     icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Rounded_Rectangle/Turkey.png
     <<: *all-proxies
     filter: "(🇹🇷)|土|TR|Turkey"
+    hidden: true
 
   - name: 奈飞节点
     icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Universal/Netflix.png
     <<: *all-proxies
     filter: "(NF)|奈飞|Netflix"
+    hidden: true
 
 rule-providers:
   # ==================block==========================
