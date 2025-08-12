@@ -99,7 +99,8 @@ proxy-groups:
     icon: https://github.com/shindgewongxj/WHATSINStash/raw/main/icon/openai.png
     proxies:
       - 新加坡节点
-      - 香港节点
+      - 日本节点
+      - 台湾节点
       - 美国节点
 
   - name: 电报消息
@@ -114,6 +115,7 @@ proxy-groups:
     icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Google_Suite/YouTube.png
     proxies:
       - 美国节点
+      - 日本节点
       - 香港节点
 
   - name: 奈飞视频
@@ -198,7 +200,7 @@ proxy-groups:
   #   type: select
   #   proxies:
   #     - 节点选择
-  #     - 自动选择
+  #     c
   #     - 香港节点
   #     - 台湾节点
   #     - 新加坡节点
@@ -211,6 +213,10 @@ proxy-groups:
     type: select
     icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Google_Suite/Google.png
     proxies:
+      - 自动选择
+      - 香港节点
+      - 日本节点
+      - 台湾节点
       - 新加坡节点
       - 美国节点
 
@@ -243,6 +249,7 @@ proxy-groups:
     proxies:
       - 全球直连
       - 香港节点
+      - 新加坡节点
 
   - name: 游戏平台
     icon: https://raw.githubusercontent.com/ewigl/licons/refs/heads/main/logos/steam.png
@@ -276,6 +283,8 @@ proxy-groups:
     proxies:
       - 自动选择
       - 香港节点
+      - 台湾节点
+      - 新加坡节点
 
   - name: Speedtest
     type: select
@@ -613,10 +622,6 @@ rule-providers:
     type: http
     behavior: classical
     url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/BiliBili/BiliBili.yaml
-  BilibiliHMT:
-    type: http
-    behavior: classical
-    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/BilibiliHMT.list
   YouTube:
     type: http
     behavior: classical
@@ -676,7 +681,6 @@ rules:
   # =================custom=========================
   - DOMAIN,cache.nixos.org,自动选择
   - DOMAIN,cache.nixos.org,自动选择
-  - DOMAIN-SUFFIX,google.com,OpenAI
   - DOMAIN,forums.swift.org,美国节点
   - DOMAIN-SUFFIX,ipa.store,全球直连
   - DOMAIN,api.adguard.org,REJECT #  Adguard
@@ -770,7 +774,6 @@ rules:
   - RULE-SET,GlobalMedia_All,国外媒体
   - RULE-SET,ChinaMedia,国内媒体,no-resolve
   - RULE-SET,Bahamut,巴哈姆特
-  - RULE-SET,BilibiliHMT,哔哩哔哩
   - RULE-SET,BiliBili,哔哩哔哩
   - RULE-SET,YouTube,油管视频
 
