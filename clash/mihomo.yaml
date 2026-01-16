@@ -29,9 +29,11 @@ tun:
 
 dns:
   enable: true
-  listen: :53
+  listen: :5354
   enhanced-mode: fake-ip
   fake-ip-range: 16.0.0.1/8
+  nameservers:
+    - 127.0.0.1:53
 
 # 节点订阅
 proxy-providers:
