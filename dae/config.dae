@@ -1,0 +1,100 @@
+global {
+  log_level: warning
+  wan_interface: auto
+  dial_mode: domain++
+  auto_config_kernel_parameter: true
+  disable_waiting_network: true
+}
+
+# Mihomo SOCKS5 出口
+node {
+  mihomo: 'socks5://127.0.0.1:7891'
+}
+
+# DNS：统一交给 MosDNS
+dns {
+  upstream {
+    mosdns: 'tcp+udp://127.0.0.1:5335'
+  }
+
+  routing {
+    request {
+      # 屏蔽特定域名
+      qname(suffix: mcdn.bilivideo.com) -> reject
+      qname(suffix: mcdn.bilivideo.cn) -> reject
+      qname(suffix: edge.mountaintoys.cn) -> reject
+      qname(suffix: h2.smtcdns.net) -> reject
+
+      # 其他 DNS 请求统一交给 MosDNS
+      fallback: mosdns
+    }
+  }
+}
+
+# 代理出口
+group {
+  mihomo {
+    policy: fixed(0)
+  }
+}
+
+routing {
+  # ==========================================
+  # 进程规则
+  # ==========================================
+
+  # 代理程序自身直连，防止代理环路
+  pname(mihomo) -> must_direct
+  pname(clash) -> must_direct
+  pname(clash-meta) -> must_direct
+
+  # MosDNS 跳过 DAE DNS 二次接管，
+  # 但仍继续匹配下面的普通流量路由规则
+  pname(mosdns) -> must_rules
+
+  # 系统及局域网相关服务
+  pname(NetworkManager) -> direct
+  pname(caddy) -> direct
+  pname(kdeconnectd) -> direct
+  pname(qbittorrent) -> direct
+  pname(cloudflared) -> direct
+
+  # ==========================================
+  # 域名规则
+  # ==========================================
+
+  # Steam 国内相关服务直连
+  domain(suffix: cm.steampowered.com) -> direct
+  domain(suffix: steamserver.net) -> direct
+  domain(geosite: steam@cn) -> direct
+  domain(suffix: bing.com) -> direct
+
+  # Epic 国内服务直连
+  domain(geosite: epicgames@cn) -> direct
+
+  # Cloudflare 国内服务直连
+  domain(geosite: cloudflare@cn) -> direct
+
+  # Microsoft 国内服务直连
+  domain(geosite: microsoft@cn) -> direct
+
+  # ==========================================
+  # IP 规则
+  # ==========================================
+
+  # 私有地址及局域网直连
+  dip(geoip:private) -> direct
+
+  # 中国大陆 IP 直连
+  dip(geoip:cn) -> direct
+
+  # ==========================================
+  # 最终规则
+  # ==========================================
+
+  # 中国大陆域名直连
+  domain(geosite:cn) -> direct
+
+  # 其他流量走 Mihomo
+  fallback: mihomo
+}
