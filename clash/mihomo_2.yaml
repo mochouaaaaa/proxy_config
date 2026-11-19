@@ -21,7 +21,7 @@ global_exclude_filter:
 proxy-providers:
   provider1:
     <<: [*proxy_providers_common, *global_exclude_filter]
-    url: "${subscription}" # 使用systemd ENV 环境变量注入
+    url: "${subscription}"
     path: ./providers/subscription.yaml
     age-secret-key: ""
     override:
@@ -35,13 +35,13 @@ proxies:
   - { name: "🇨🇳 直连 | 仅IPv6", type: direct, ip-version: ipv6 }
 
 # =============global base config==================
-mixed-port: 7890
-socks-port: 7891
-allow-lan: false
+port: ${MIHOMO_HTTP_PORT}
+socks-port: ${MIHOMO_SOCKS_PORT}
+allow-lan: true
 ipv6: true
 mode: rule
 log-level: warning
-bind-address: "127.0.0.1"
+bind-address: "${MIHOMO_ALL_ADDRESS}"
 unified-delay: true
 tcp-concurrent: true
 keep-alive-interval: 60
@@ -51,7 +51,7 @@ external-ui: ui
 secret: 123456
 
 geox-url:
-  mmdb: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/country.mmdb"
+  mmdb: "https://cdn.jsdmirror.com/gh/MetaCubeX/meta-rules-dat@release/country.mmdb"
 
 profile:
   store-selected: true
@@ -69,22 +69,26 @@ dns_common:
   proxyServerDNS: &proxyServerDNS ["114.114.114.114#DIRECT", "223.5.5.5#DIRECT"]
 
 dns:
-  enable: false
-  listen: :53
-  ipv6: true
+  enable: ${MIHOMO_DNS_ENABLE}
+  listen: "${MIHOMO_DNS_LISTEN}"
+  ipv6: ${MIHOMO_DNS_IPV6}
   use-hosts: true
   cache-algorithm: arc
   use-system-hosts: true
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
-  fake-ip-range6: 2001:2::1/48
+  fake-ip-range6: fdfe:dcba:9876::1/64
   fake-ip-filter:
-    [
-      "rule-set:private",
-      "rule-set:fakeip_filter",
-      "rule-set:cn",
-      "rule-set:googlefcm",
-    ]
+    - "*.lan"
+    - "*.local"
+    - "*.home.arpa"
+    - "rule-set:Lan"
+    - "rule-set:private"
+    - "rule-set:fakeip_filter"
+    - "rule-set:cn"
+    - "rule-set:china_classical"
+    - "rule-set:speed_test"
+    - "rule-set:googlefcm"
   default-nameserver: *defaultDNS
   proxy-server-nameserver: *proxyServerDNS
   nameserver: *foreignDNS
@@ -113,7 +117,7 @@ ntp:
   write-to-system: false
   server: "ntp.aliyun.com"
   port: 123
-  interval: 60
+  interval: 3600
 
 tun:
   enable: false
@@ -141,11 +145,22 @@ rule_providers_common:
       interval: 86400,
       behavior: ipcidr,
     }
+  rule_providers_yaml:
+    &rule_providers_yaml {
+      type: http,
+      format: yaml,
+      interval: 86400,
+      behavior: classical,
+    }
 
 # 定义 Rule Providers
 rule-providers:
   # --- 直连规则集 ---
 
+  Lan:
+    <<: *rule_providers_yaml
+    url: "https://cdn.jsdmirror.com/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Lan/Lan.yaml"
+    path: "./ruleset/Lan.yaml"
   private:
     <<: *rule_providers_domain
     url: "https://cdn.jsdmirror.com/gh/appshubcc/bett-rules@meta/geo/geosite/private.mrs"
@@ -191,6 +206,26 @@ rule-providers:
     url: "https://cdn.jsdmirror.com/gh/appshubcc/bett-rules@meta/geo/geoip/cn.mrs"
     path: "./ruleset/cn_ip.mrs"
     path-in-bundle: "geo/geoip/cn.mrs"
+  china_classical:
+    <<: *rule_providers_yaml
+    url: https://cdn.jsdmirror.com/gh/blackmatrix7/ios_rule_script@master/rule/Clash/China/China_Classical.yaml
+    path: "./ruleset/china_classical"
+  china_dns:
+    <<: *rule_providers_yaml
+    url: https://cdn.jsdmirror.com/gh/blackmatrix7/ios_rule_script@master/rule/Clash/ChinaDNS/ChinaDNS.yaml
+    path: "./ruleset/china_dns"
+  speed_test:
+    <<: *rule_providers_yaml
+    path: "./ruleset/Speedtest.yaml"
+    url: https://cdn.jsdmirror.com/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Speedtest/Speedtest.yaml
+  hijacking:
+    <<: *rule_providers_yaml
+    url: https://cdn.jsdmirror.com/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Hijacking/Hijacking.yaml
+    path: "./ruleset/hijacking"
+  block_httpDNS:
+    <<: *rule_providers_yaml
+    url: https://cdn.jsdmirror.com/gh/blackmatrix7/ios_rule_script@master/rule/Clash/BlockHttpDNS/BlockHttpDNS.yaml
+    path: "./ruleset/block_httpDNS"
 
   # --- 代理规则集 ---
 
@@ -214,17 +249,23 @@ rule-providers:
     url: "https://cdn.jsdmirror.com/gh/appshubcc/bett-rules@meta/geo/geoip/google.mrs"
     path: "./ruleset/google_ip.mrs"
     path-in-bundle: "geo/geoip/google.mrs"
+  google_search:
+    <<: *rule_providers_yaml
+    url: https://cdn.jsdmirror.com/gh/blackmatrix7/ios_rule_script@master/rule/Clash/GoogleSearch/GoogleSearch.yaml
+    path: "./ruleset/goole_search.yaml"
   duckduckgo:
-    type: http
-    behavior: classical
-    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Duckduckgo/Duckduckgo.yaml"
+    <<: *rule_providers_yaml
+    url: "https://cdn.jsdmirror.com/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Duckduckgo/Duckduckgo.yaml"
     path: "./ruleset/duckduckgo.yaml"
-    format: yaml
   ai:
     <<: *rule_providers_domain
     url: "https://cdn.jsdmirror.com/gh/appshubcc/bett-rules@meta/geo/geosite/category-ai-!cn.mrs"
     path: "./ruleset/ai.mrs"
     path-in-bundle: "geo/geosite/category-ai-!cn.mrs"
+  gemini:
+    <<: *rule_providers_yaml
+    url: https://cdn.jsdmirror.com/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Gemini/Gemini.yaml
+    path: "./ruleset/gemini.yaml"
   github:
     <<: *rule_providers_domain
     url: "https://cdn.jsdmirror.com/gh/appshubcc/bett-rules@meta/geo/geosite/github.mrs"
@@ -240,6 +281,8 @@ rule-providers:
     url: "https://cdn.jsdmirror.com/gh/appshubcc/bett-rules@meta/geo/geoip/microsoft.mrs"
     path: "./ruleset/microsoft_ip.mrs"
     path-in-bundle: "geo/geoip/microsoft.mrs"
+
+  #==================apple======================
   apple:
     <<: *rule_providers_domain
     url: "https://cdn.jsdmirror.com/gh/appshubcc/bett-rules@meta/geo/geosite/apple.mrs"
@@ -250,16 +293,41 @@ rule-providers:
     url: "https://cdn.jsdmirror.com/gh/appshubcc/bett-rules@meta/geo/geoip/apple.mrs"
     path: "./ruleset/apple_ip.mrs"
     path-in-bundle: "geo/geoip/apple.mrs"
+  system_ota:
+    <<: *rule_providers_yaml
+    url: https://cdn.jsdmirror.com/gh/blackmatrix7/ios_rule_script@master/rule/Clash/SystemOTA/SystemOTA.yaml
+    path: "./ruleset/apple_systemota"
+  iCloud:
+    <<: *rule_providers_yaml
+    url: https://cdn.jsdmirror.com/gh/blackmatrix7/ios_rule_script@master/rule/Clash/iCloud/iCloud.yaml
+    path: "./ruleset/apple_icloud"
+  apple_mail:
+    <<: *rule_providers_yaml
+    url: https://cdn.jsdmirror.com/gh/blackmatrix7/ios_rule_script@master/rule/Clash/AppleMail/AppleMail.yaml
+    path: "./ruleset/apple_mail"
+  apple_id:
+    <<: *rule_providers_yaml
+    url: https://cdn.jsdmirror.com/gh/blackmatrix7/ios_rule_script@master/rule/Clash/AppleID/AppleID.yaml
+    path: "./ruleset/apple_id"
+  apple_domain:
+    <<: *rule_providers_yaml
+    url: https://cdn.jsdmirror.com/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Apple/Apple_Classical.yaml
+    path: "./ruleset/apple_chlassical"
+
+  # telegram:
+  #   <<: *rule_providers_domain
+  #   url: "https://cdn.jsdmirror.com/gh/appshubcc/bett-rules@meta/geo/geosite/telegram.mrs"
+  #   path: "./ruleset/telegram.mrs"
+  #   path-in-bundle: "geo/geosite/telegram.mrs"
+  # telegram_ip:
+  #   <<: *rule_providers_ip
+  #   url: "https://cdn.jsdmirror.com/gh/appshubcc/bett-rules@meta/geo/geoip/telegram.mrs"
+  #   path: "./ruleset/telegram_ip.mrs"
+  #   path-in-bundle: "geo/geoip/telegram.mrs"
   telegram:
-    <<: *rule_providers_domain
-    url: "https://cdn.jsdmirror.com/gh/appshubcc/bett-rules@meta/geo/geosite/telegram.mrs"
-    path: "./ruleset/telegram.mrs"
-    path-in-bundle: "geo/geosite/telegram.mrs"
-  telegram_ip:
-    <<: *rule_providers_ip
-    url: "https://cdn.jsdmirror.com/gh/appshubcc/bett-rules@meta/geo/geoip/telegram.mrs"
-    path: "./ruleset/telegram_ip.mrs"
-    path-in-bundle: "geo/geoip/telegram.mrs"
+    <<: *rule_providers_yaml
+    url: "https://cdn.jsdmirror.com/gh/blackmatrix7/ios_rule_script@master/rule/Clash/TelegramSG/TelegramSG.yaml"
+    path: "./ruleset/telegram.yaml"
   steam:
     <<: *rule_providers_domain
     url: "https://cdn.jsdmirror.com/gh/appshubcc/bett-rules@meta/geo/geosite/steam.mrs"
@@ -324,7 +392,7 @@ rule-providers:
     <<: *rule_providers_domain
     url: "https://cdn.jsdmirror.com/gh/binaryu/emos-proxy-rule@main/rules/emos-mihomo.mrs"
     path: "./ruleset/emos.mrs"
-    path-in-bundle: "geo/geosite/category-emby.mrs"
+    path-in-bundle: "geo/geosite/emos.mrs"
   pikpak:
     <<: *rule_providers_domain
     url: "https://cdn.jsdmirror.com/gh/appshubcc/bett-rules@meta/geo/geosite/pikpak.mrs"
@@ -403,8 +471,8 @@ group_common:
       lazy: true,
     }
 
-  group_common_auto: &group_common_auto {
-      # type: smart,
+  group_common_auto:
+    &group_common_auto {
       type: url-test,
       interval: 600,
       timeout: 3000,
@@ -414,10 +482,9 @@ group_common:
       lazy: true,
       tolerance: 50,
       include-all: true,
-      exclude-type: "DIRECT",
+      exclude-type: "DIRECT|REJECT",
       icon: "https://cdn.jsdmirror.com/gh/AIsouler/MyClash@main/Icons/svg/Auto.svg",
       hidden: true,
-      # uselightgbm: true
     }
 
   group_common_load:
@@ -431,7 +498,7 @@ group_common:
       lazy: true,
       strategy: "sticky-sessions",
       include-all: true,
-      exclude-type: "DIRECT",
+      exclude-type: "DIRECT|REJECT",
       icon: "https://cdn.jsdmirror.com/gh/AIsouler/MyClash@main/Icons/svg/RoundRobin.svg",
       hidden: true,
     }
@@ -485,31 +552,31 @@ proxies_common:
 group_filter:
   HK_filter:
     &HK_filter {
-      filter: '(?i)(🇭🇰|香港|(?<![A-Za-z])HKG?(?![A-Za-z])|hong\s*kong)',
+      filter: '(?i)(🇭🇰|香港|(^|[^A-Za-z])HKG?([^A-Za-z]|$)|hong\s*kong)',
     }
   JP_filter:
     &JP_filter {
-      filter: "(?i)(🇯🇵|日本|东京|大阪|京都|(?<![A-Za-z])JPN?(?![A-Za-z])|japan)",
+      filter: "(?i)(🇯🇵|日本|东京|大阪|京都|(^|[^A-Za-z])JPN?([^A-Za-z]|$)|japan)",
     }
   US_filter:
     &US_filter {
-      filter: '(?i)(🇺🇸|美国|纽约|洛杉矶|旧金山|芝加哥|休斯顿|迈阿密|西雅图|波士顿|华盛顿|拉斯维加斯|圣何塞|(?<![A-Za-z])USA?(?![A-Za-z])|america|united\s*states)',
+      filter: '(?i)(🇺🇸|美国|纽约|洛杉矶|旧金山|芝加哥|休斯顿|迈阿密|西雅图|波士顿|华盛顿|拉斯维加斯|圣何塞|(^|[^A-Za-z])USA?([^A-Za-z]|$)|america|united\s*states)',
     }
   SG_filter:
     &SG_filter {
-      filter: "(?i)(🇸🇬|新加坡|狮城|(?<![A-Za-z])SGP?(?![A-Za-z])|singapore)",
+      filter: "(?i)(🇸🇬|新加坡|狮城|(^|[^A-Za-z])SGP?([^A-Za-z]|$)|singapore)",
     }
   TW_filter:
     &TW_filter {
-      filter: "(?i)(🇹🇼|台湾|台北|高雄|(?<![A-Za-z])TWN?(?![A-Za-z])|taiwan)",
+      filter: "(?i)(🇹🇼|台湾|台北|高雄|(^|[^A-Za-z])TWN?([^A-Za-z]|$)|taiwan)",
     }
   low_filter:
     &low_filter {
-      filter: '(?i)(^(?!.*(?:剩|期)).*(?:(?<![\d.])0(\.[0-5]|[*×✕✖⨯⨉x倍]))|(?:[*×✕✖⨯⨉x]0)|^(?!.*(?:客户端|软件)).*下载|低倍|免费|(?<![A-Za-z])free(?![A-Za-z]))',
+      filter: '(?i)(0(\.[0-5]|[*×✕✖⨯⨉x倍])|[*×✕✖⨯⨉x]0|低倍|免费|(^|[^A-Za-z])free([^A-Za-z]|$))',
     }
   high_filter:
     &high_filter {
-      filter: '(?i)(?:[*×✕✖⨯⨉x](?:[2-9]\d*|[1-9]\d+)(?:\.\d+)?)|(?:(?<![\d.])(?:[2-9]\d*|[1-9]\d+)(?:\.\d+)?(?:倍|[*×✕✖⨯⨉x]))',
+      filter: '(?i)([*×✕✖⨯⨉x](?:[2-9][0-9]*|[1-9][0-9]+)(?:\.[0-9]+)?|(^|[^0-9.])(?:[2-9][0-9]*|[1-9][0-9]+)(?:\.[0-9]+)?(?:倍|[*×✕✖⨯⨉x]))',
     }
   home_filter:
     &home_filter {
@@ -517,7 +584,7 @@ group_filter:
     }
   exclude_filter:
     &exclude_filter {
-      exclude-filter: '(?i)(🇭🇰|香港|(?<![A-Za-z])HKG?(?![A-Za-z])|hong\s*kong|🇯🇵|日本|东京|大阪|京都|(?<![A-Za-z])JPN?(?![A-Za-z])|japan|🇺🇸|美国|纽约|洛杉矶|旧金山|芝加哥|休斯顿|迈阿密|西雅图|波士顿|华盛顿|拉斯维加斯|圣何塞|(?<![A-Za-z])USA?(?![A-Za-z])|america|united\s*states|🇸🇬|新加坡|狮城|(?<![A-Za-z])SGP?(?![A-Za-z])|singapore|🇹🇼|台湾|台北|高雄|(?<![A-Za-z])TWN?(?![A-Za-z])|taiwan)',
+      exclude-filter: '(?i)(🇭🇰|香港|(^|[^A-Za-z])HKG?([^A-Za-z]|$)|hong\s*kong|🇯🇵|日本|东京|大阪|京都|(^|[^A-Za-z])JPN?([^A-Za-z]|$)|japan|🇺🇸|美国|纽约|洛杉矶|旧金山|芝加哥|休斯顿|迈阿密|西雅图|波士顿|华盛顿|拉斯维加斯|圣何塞|(^|[^A-Za-z])USA?([^A-Za-z]|$)|america|united\s*states|🇸🇬|新加坡|狮城|(^|[^A-Za-z])SGP?([^A-Za-z]|$)|singapore|🇹🇼|台湾|台北|高雄|(^|[^A-Za-z])TWN?([^A-Za-z]|$)|taiwan)',
     }
 
 # 定义分流策略组
@@ -544,7 +611,7 @@ proxy-groups:
   - name: "手动选择"
     <<: *group_common_select
     include-all: true
-    exclude-type: "DIRECT"
+    exclude-type: "DIRECT|REJECT"
     icon: "https://cdn.jsdmirror.com/gh/AIsouler/MyClash@main/Icons/svg/Static.svg"
 
   - name: "自动选择"
@@ -736,7 +803,7 @@ proxy-groups:
   - name: "其他节点"
     <<: [*group_common_select, *exclude_filter]
     include-all: true
-    exclude-type: "DIRECT"
+    exclude-type: "DIRECT|REJECT"
     proxies: ["其他节点-自动选择"]
     icon: "https://cdn.jsdmirror.com/gh/AIsouler/MyClash@main/Icons/svg/WorldMap.svg"
   - name: "其他节点-自动选择"
@@ -744,40 +811,51 @@ proxy-groups:
 
 # --- 路由规则 (Rules) ---
 rules:
-  # 规则集下载域名，避免出现鸡蛋问题
+  # Rule-set bootstrap
   - DOMAIN,cdn.jsdmirror.com,直连
+  - DOMAIN,www.jsdelivr.com,直连
 
-  # 私有网络直连
+  # Private networks first
+  - RULE-SET,Lan,直连,no-resolve
   - RULE-SET,private,直连
+  - RULE-SET,private_ip,直连
 
-  # 国内直连
-  - RULE-SET,geolocation-cn,直连
-  - RULE-SET,games_cn,直连 # 已包含 steam 下载域名
+  - RULE-SET,hijacking,REJECT
+  - RULE-SET,block_httpDNS,REJECT
+
+  # Explicit China-direct services
+  - RULE-SET,games_cn,直连
   - RULE-SET,synology,直连
   - RULE-SET,nvidia_cn,直连
-  - RULE-SET,apple_cn,直连
   - RULE-SET,microsoft_cn,直连
+  - RULE-SET,speed_test,直连
   - DOMAIN,fsend.cn,直连
   - DOMAIN,international-gfe.download.nvidia.com,直连
   - DOMAIN-SUFFIX,ctaiot.com,直连
 
-  # 禁用国外 QUIC 流量（默认不启用，如果想启用请删除前面的#号注释）
-  # - AND,((NETWORK,UDP),(DST-PORT,443),(NOT,((OR,((RULE-SET,cn),(RULE-SET,cn_ip,no-resolve)))))),REJECT
+  - RULE-SET,china_classical,直连
+  - RULE-SET,china_dns,直连
 
-  # 广告拦截
-  - RULE-SET,category-ads,AdBlock
+  # ==========apple=================
+  - RULE-SET,apple_cn,直连
+  - RULE-SET,apple,Apple
+  - RULE-SET,system_ota,REJECT
+  - RULE-SET,iCloud,Apple
+  - RULE-SET,apple_mail,Apple
+  - RULE-SET,apple_id,Apple
+  - RULE-SET,apple_domain,Apple
 
-  # 代理规则（非IP类）
-  - RULE-SET,googlefcm,FCM
+  # Service-specific domain rules before broad geo rules
+
   - RULE-SET,youtube,YouTube
-  - RULE-SET,google,Google
   - RULE-SET,ai,AI
+  - RULE-SET,gemini,AI
   - DOMAIN,cdn.usefathom.com,AI
   - DOMAIN-SUFFIX,intercom.io,AI
   - DOMAIN-SUFFIX,intercomcdn.com,AI
   - RULE-SET,github,GitHub
   - RULE-SET,microsoft,Microsoft
-  - RULE-SET,apple,Apple
+
   - RULE-SET,telegram,Telegram
   - RULE-SET,steam,Steam
   - RULE-SET,tiktok,TikTok
@@ -803,14 +881,22 @@ rules:
   - RULE-SET,paypal,PayPal
   - RULE-SET,patreon,Patreon
   - RULE-SET,ehentai,EHentai
-  - RULE-SET,geolocation-!cn,默认代理
-  - RULE-SET,duckduckgo,默认代理
+  - RULE-SET,duckduckgo,Google
+  - RULE-SET,google_search,Google
+  - RULE-SET,google,Google
+  - RULE-SET,googlefcm,FCM
 
-  # 代理（IP类）
+  # General China domain fallback, after service-specific rules
+  - RULE-SET,geolocation-cn,直连
+
+  # China destinations above remain direct; block ads for remaining destinations
+  - RULE-SET,category-ads,AdBlock
+
+  # Service IP rules
   - RULE-SET,google_ip,Google
   - RULE-SET,microsoft_ip,Microsoft
   - RULE-SET,apple_ip,Apple
-  - RULE-SET,telegram_ip,Telegram
+  # - RULE-SET,telegram_ip,Telegram
   - RULE-SET,steam_ip,Steam
   - RULE-SET,tiktok_ip,TikTok
   - RULE-SET,twitter_ip,Twitter
@@ -818,7 +904,11 @@ rules:
   - RULE-SET,netflix_ip,Netflix
   - RULE-SET,spotify_ip,Spotify
 
-  # 兜底规则
+  # General non-China domain fallback
+  - RULE-SET,geolocation-!cn,默认代理
+
+  # China IP fallback
   - RULE-SET,cn_ip,直连
-  - RULE-SET,private_ip,直连
+
+  # Final fallback
   - MATCH,漏网之鱼
